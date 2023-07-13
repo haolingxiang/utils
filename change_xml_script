@@ -13,7 +13,7 @@ def change_xml(xml_fold, origin_name, new_name):
             obj.tag = new_name
             print("change %s to %s." % (origin_name, new_name))
             cnt += 1
-        dom.write(file_path, xml_declaration=True)
+        dom.write(file_path, xml_declaration=True, encoding="utf-8")
     print("有%d个文件被成功修改。" % cnt)
 
 
