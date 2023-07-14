@@ -1,0 +1,15 @@
+from PIL import Image
+import os
+
+def image_resize(img_path, new_path, size):
+    imgs = os.listdir(img_path)
+    for img in imgs:
+        file = os.path.join(img_path, img)
+        img1 = Image.open(file).resize(size)
+        img1.save(os.path.join(new_path, img))
+
+
+if __name__ == "__main__":
+    img_path = r"D:\trace_prediction\images"
+    new_path = r"D:\trace_prediction\newimages"
+    image_resize(img_path, new_path, (1024, 1024))
