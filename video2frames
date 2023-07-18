@@ -1,0 +1,43 @@
+import os
+import cv2
+from mtcnn import MTCNN
+from PIL import Image
+import numpy as np
+
+video_src_path = r"E:\hlxfolder\deepfakedetection\data\celebA-DF"
+video_save_path = r"E:\hlxfolder\deepfakedetection\data\celebA-DF-imgs"
+
+videos = os.listdir(video_src_path)
+detector = MTCNN()
+
+i = 1
+
+for each_video in videos:
+    each_video_full_path = os.path.join(video_src_path, each_video)
+    cap = cv2.VideoCapture(each_video_full_path)
+
+    print('正在处理第{}个视频，一共{}个视频'.format(i, len(videos)))
+
+    frame_count = 0
+    success = True
+
+    while success:
+        success, frame = cap.read()
+        if success:
+            frame_count += 1
+            if frame_count % 10 == 0:
+                detected = detector.detect_faces(frame)
+                if len(detected) > 1:
+                    continue
+                if len(detected) < 1:
+                    continue
+                bbox = detected[0]["box"]
+                h, w = frame.shape[0], frame.shape[1]
+                x1 = max(0, bbox[0])
+                y1 = max(0, bbox[1])
+                cv2.imwrite(video_save_path + "\\" + "i%d.jpg" % i + "frame%d.jpg" % frame_count,
+                            frame[y1:y1 + bbox[3], x1:x1 + bbox[2]])
+
+    i = i + 1
+
+    cap.release()
